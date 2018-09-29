@@ -6,5 +6,5 @@
 
 
 * Что использовалось: React, Redux, React Router, JavaScript, SASS, Webpack, BEM, PHP, MySQL
-* Функционал: анимации
+* Функционал: проигрвавание треков
 * Ссылка на сайт: http://audio.ua-ix.biz/
