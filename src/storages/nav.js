@@ -19,6 +19,14 @@ let nav= (store= init, action) =>{
 			return store;
 		}
 
+		case('ALL_TRACK_LIST'): {
+			store= store.map( (e) =>{
+				e.status= action.url != e.link ? false : true;
+				return e;
+			})
+			return store;
+		}
+
 		default:
 			return store;
 	}

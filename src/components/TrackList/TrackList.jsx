@@ -28,6 +28,7 @@ class TrackList extends React.Component{
 		this.props.play(num, trackList, url);
 	}
 
+
 	firstTrack(){
 		let num= arguments[0];
 		this.props.firstTrack(num);
@@ -42,7 +43,7 @@ class TrackList extends React.Component{
 				<div className="TrackList__item" key={ i }>
 					<div className="TrackList__col TrackList__col_1">
 						<span className={ `TrackList__btn TrackList__btn_play ${ !e.play ? 'fi fi-play' : 'fi fi-pause' }` } onClick={ this.play.bind(this, i) } ></span>
-						<a download="download" href={ window.srcData + 'music/' + e.id + '.mp3' } className="TrackList__btn TrackList__btn_download fi fi-arrow-down"></a>
+						<a download="download" href={ window.srcData + `ctr/index.php?ctr=download&name=${ e.name }&artist=${ e.artist }&id=${ e.id }&action=DOWNLOAD` } className="TrackList__btn TrackList__btn_download fi fi-arrow-down"></a>
 
 						<div className="TrackList__info">
 							<div className="TrackList__artist"> { e.artist } </div>
