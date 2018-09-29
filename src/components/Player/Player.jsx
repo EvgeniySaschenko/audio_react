@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import _lib from '../../assets/js';
 
 class Player extends React.Component{
 	constructor(props){
@@ -12,8 +13,7 @@ class Player extends React.Component{
 
 		if(player.trackList.length > 0){
 			let { id, play }= player.trackList[player.num];
-			let info= document.querySelector('.Player__info');
-			let progress= document.querySelector('.Player__progress');
+			let { Player__info, Player__progress }= this.refs;
 
 			let prevId= prevProps.data.player.trackList[prevProps.data.player.num] ? prevProps.data.player.trackList[prevProps.data.player.num].id : false;
 
@@ -22,18 +22,21 @@ class Player extends React.Component{
 				this.audio.load();
 				this.audio.src= window.srcData + 'music/' + id + '.mp3';
 				this.audio.type='audio/mpeg';
-				this.audio.play();
+				let promise= this.audio.play();
+				promise
+					.then(function() {})
+					.catch(function(error) {});
 
 				// Прогресс
 				this.audio.addEventListener('timeupdate', (e)=> {
-					let progressFactor= info.offsetWidth / this.audio.duration;
-					progress.style.width= progressFactor * this.audio.currentTime + 'px';
+					let progressFactor= Player__info.offsetWidth / this.audio.duration;
+					Player__progress.style.width= progressFactor * this.audio.currentTime + 'px';
 				})
 
 				// Слушатель на окончание трека
 				this.audio.addEventListener('ended', (e)=>{
-					let numTrackNew= Number( player.num ) + 1 <= player.trackList.length ? Number( player.num ) + 1 : 0;
-					this.props.prevNextTrack(player.num, Number( numTrackNew ));
+					let nextTrack= player.num != player.trackList.length - 1 ? player.num + 1 : 0;
+					this.props.play(nextTrack, player.trackList, player.url);
 				})
 			}else{
 				// Воспроизвести / поставить на паузу
@@ -47,6 +50,19 @@ class Player extends React.Component{
 		let { player }= this.props.data;
 		let num= arguments[0] ? arguments[0] : 0;
 		this.props.play(num, player.trackList, player.url);
+	}
+
+
+	regulatorAudioVolume(){
+		// Регулятор громкости
+		let { Player__volumeScale, Player__volumeToggle }= this.refs;
+		_lib.regulatorAudio(Player__volumeScale, Player__volumeToggle, this.audio, 'volume');
+	}
+
+	regulatorAudioCurrentTime(){
+		// Регулятор прокрутка трека
+		let { Player__info, Player__progress }= this.refs;
+		_lib.regulatorAudio(Player__info, Player__progress, this.audio, 'currentTime');
 	}
 
 	render(){
@@ -68,8 +84,8 @@ class Player extends React.Component{
 				<span className="Player__prev fi fi-rewind" onClick={ this.play.bind(this, numPrev) }></span>	
 				<span className={ `Player__toggle ${ play ? 'fi fi-pause' : 'fi fi-play' } `} onClick={ this.play.bind(this, num) }></span>
 				<span className="Player__next fi fi-fast-forward" onClick={ this.play.bind(this, numNext) }></span>	
-				<div className="Player__info">
-					<div className="Player__progress"></div>
+				<div ref="Player__info" className="Player__info" onMouseEnter={ this.regulatorAudioCurrentTime.bind(this) }>
+					<div ref="Player__progress" className="Player__progress"></div>
 					<span className="Player__current-position"></span>
 					<div className="Player__box-info">
 						<span className="Player__name">{ name }</span> - 
@@ -77,8 +93,8 @@ class Player extends React.Component{
 					</div>
 					<span className="Player__duration"></span>
 				</div>
-				<div className="Player__volume-scale">
-					<div className="Player__volume-toggle">
+				<div ref="Player__volumeScale" className="Player__volume-scale" onMouseEnter={ this.regulatorAudioVolume.bind(this) } >
+					<div ref="Player__volumeToggle" className="Player__volume-toggle">
 					</div>
 				</div>
 				<i className="Player__volume-icon fi fi-volume"></i>
