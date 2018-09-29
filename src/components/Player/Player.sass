@@ -1,0 +1,61 @@
+.Player
+	display: flex
+	justify-content: center
+	align-items: center
+	position: fixed
+	z-index: 1000
+	bottom: 0
+	min-height: 50px
+	width: 100%
+	background-color: $corp-2
+	color: #fff
+	&__toggle,
+	&__prev,
+	&__next
+		cursor: pointer
+	&__toggle
+		font-size: 30px
+		margin: 0 25px
+	&__prev,
+	&__next
+		font-size: 20px
+	&__info
+		display: flex
+		justify-content: space-between
+		width: 30%
+		background-color: #000
+		font-size: 12px
+		padding: 5px
+		margin: 0 20px
+		position: relative
+		cursor: pointer
+		user-select: none
+		text-align: center
+	&__progress
+		height: 100%
+		background-color: rgba($corp-1, .6)
+		position: absolute
+		top: 0
+		left: 0
+	&__artist,
+	&__name
+		padding: 10px
+	&__volume-scale
+		width: 100px
+		height: 13px
+		background-color: $corp-1
+	&__volume-toggle
+		height: 100%
+		background-color: $corp-1
+	&__volume-icon
+		font-size: 20px
+		padding-left: 5px
+	&__duration
+		margin-left: 5px
+
+@media (max-width: 600px)
+	.Player
+		&__info
+			display: none
+		&__volume-scale
+			margin-left: 25px
